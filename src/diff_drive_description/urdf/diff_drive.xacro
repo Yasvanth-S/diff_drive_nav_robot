@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<robot name="diff_drive" xmlns:xacro="http://ros.org/wiki/xacro">
+    
+    <xacro:include filename="$(find diff_drive_description)/urdf/mechanical.xacro"/>
+    <xacro:include filename="$(find diff_drive_description)/urdf/gazebo.xacro"/>
+
+    <xacro:gazebo
+    wheel_l_ln="left_wheel"
+    wheel_r_ln="right_wheel"
+    lidar_ln="rplidar"
+    camera_ln_n="camera"
+    camera_name="camera"
+    imu_ln_n="imu"
+    />
+    <xacro:mechanical
+    base_ln_xyz="-0.412 -0.14 -0.086"
+    base_ln_rpy="0 0 0"
+    base_ln_mass="0.1"
+    wheel_l_ln="left_wheel"
+    wheel_r_ln="right_wheel"
+    wheel_l_xyz="-0.155 -0.04 0.08"
+    wheel_r_xyz="0.135 -0.04 0.08"
+    wheel_l_rpy="0 1.54 0" 
+    wheel_r_rpy="0 1.54 0"
+    wheel_mass="0.08"
+    wheel_rad="0.08"
+    caster_ln="caster" 
+    caster_xyz="-0.015 0.25 0"
+    caster_rpy="1.54 0 1.54"
+    caster_mass="0.05"
+    lidar_ln="rplidar"
+    lidar_xyz="0 0 0.04"
+    lidar_rpy="0 0 0"
+    lidar_mass="0.03"
+    camera_ln="camera"
+    camera_xyz="0.05 0 0.04"
+    camera_rpy="0 0 0"
+    camera_mass="0.03"
+    camera_name="camera"
+    imu_ln="imu"
+    imu_xyz="-0.04 0 0.04"
+    imu_rpy="0 0 0"
+    imu_mass="0.01"
+    />
+
+</robot>

@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Sensor models -->
+	<!-- <xacro:include filename="$(find diff_drive_description)/urdf/sensor.xacro" /> -->
+
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+    <material name="Green">
+        <color rgba="0.0 0.8 0.0 1.0"/>
+    </material>
+	
+	<xacro:macro name="cylinder_inertia" params="m r h">
+    
+        <inertia  
+            ixx="${m*(3*r*r+h*h)/12}" 
+                    ixy = "0" 
+                    ixz = "0"
+                    iyy="${m*(3*r*r+h*h)/12}" 
+                    iyz = "0"
+                    izz="${m*r*r/2}"
+        />
+    </xacro:macro>
+    
+    <xacro:macro name="box_inertia" params="m l w h">
+    
+        <inertia  
+            ixx="${m*(w*w+h*h)/12}" 
+                    ixy = "0" 
+                    ixz = "0"
+                    iyy="${m*(l*l+h*h)/12}" 
+                    iyz = "0"
+                    izz="${m*(l*l+h*h)/12}"
+        />
+    </xacro:macro>
+    
+    <xacro:macro
+    name="mechanical"
+    params="base_ln_xyz base_ln_rpy base_ln_mass wheel_l_ln wheel_r_ln wheel_l_xyz wheel_r_xyz wheel_l_rpy wheel_r_rpy wheel_mass wheel_rad caster_ln caster_xyz caster_rpy caster_mass lidar_ln lidar_xyz lidar_rpy lidar_mass camera_ln camera_xyz camera_rpy camera_mass camera_name imu_ln imu_xyz imu_rpy imu_mass" >
+	
+
+	<link name="base_footprint"/>
+  
+	<link name='base_link'>
+
+		<collision> 
+			<origin xyz="${base_ln_xyz}" 
+					rpy="${base_ln_rpy}"/> 
+			<geometry> 
+				<mesh filename="package://diff_drive_description/meshes/main.STL" scale="0.001 0.001 0.001"/>
+			</geometry> 
+		</collision>
+
+		<visual> 
+			<origin xyz="${base_ln_xyz}" 
+					rpy="${base_ln_rpy}"/> 
+			<geometry>  
+				<mesh filename="package://diff_drive_description/meshes/main.STL" scale="0.001 0.001 0.001"/>
+			</geometry> 
+			<material name="White"/>
+		</visual>
+
+		<inertial> 
+			<origin xyz="${base_ln_xyz}" 
+					rpy="${base_ln_rpy}"/> 
+			<mass value="${base_ln_mass}"/> 
+			<xacro:box_inertia 
+				m="${base_ln_mass}" 
+				l="0.4" 
+				w="0.4" 
+				h="0.2"/>
+		</inertial>
+	</link>
+
+    <link name='${wheel_l_ln}_link'>
+
+		<collision> 
+			<origin xyz="${wheel_l_xyz}" 
+					rpy="${wheel_l_rpy}"/> 
+			<geometry> 
+				<mesh filename="package://diff_drive_description/meshes/wheel_80mm.STL" scale="0.001 0.01 0.001"/>
+			</geometry> 
+		</collision>
+
+		<visual> 
+			<origin xyz="${wheel_l_xyz}" 
+					rpy="${wheel_l_rpy}"/> 
+			<geometry>  
+				<mesh filename="package://diff_drive_description/meshes/wheel_80mm.STL" scale="0.001 0.001 0.001"/>
+			</geometry> 
+			<material name="Green"/>
+		</visual>
+
+		<inertial> 
+			<origin xyz="${wheel_l_xyz}" 
+					rpy="${wheel_l_rpy}"/> 
+			<mass value="${wheel_mass}"/> 
+			<xacro:cylinder_inertia 
+				m="${wheel_mass}"
+                r="${wheel_rad}"
+                h="0.05" 
+            />
+		</inertial>
+
+	</link>
+
+    <link name='${wheel_r_ln}_link'>
+
+		<collision> 
+			<origin xyz="${wheel_r_xyz}" 
+					rpy="${wheel_r_rpy}"/> 
+			<geometry> 
+				<mesh filename="package://diff_drive_description/meshes/wheel_80mm.STL" scale="0.001 0.001 0.001"/>
+			</geometry> 
+		</collision>
+
+		<visual> 
+			<origin xyz="${wheel_r_xyz}" 
+					rpy="${wheel_r_rpy}"/> 
+			<geometry>  
+				<mesh filename="package://diff_drive_description/meshes/wheel_80mm.STL" scale="0.001 0.001 0.001"/>
+			</geometry> 
+			<material name="Red"/>
+		</visual>
+
+		<inertial> 
+			<origin xyz="${wheel_r_xyz}" 
+					rpy="${wheel_r_rpy}"/> 
+			<mass value="${wheel_mass}"/> 
+			<xacro:cylinder_inertia 
+				m="${wheel_mass}"
+                r="${wheel_rad}"
+                h="0.05" 
+            />
+		</inertial>
+
+	</link>
+
+	<link name="${caster_ln}_link">
+
+		<collision>
+			<origin xyz="${caster_xyz}" 
+					rpy="${caster_rpy}"/>
+			<geometry>
+				<mesh filename="package://diff_drive_description/meshes/caster.STL" scale="0.001 0.001 0.001"/>
+	  		</geometry>
+		</collision>
+
+		<visual> 
+			<origin xyz="${caster_xyz}" 
+					rpy="${caster_rpy}"/>
+			<geometry>
+				<mesh filename="package://diff_drive_description/meshes/caster.STL" scale="0.001 0.001 0.001"/>
+			</geometry>
+			<material name="Black" />
+		</visual>
+
+		<inertial>
+			<origin xyz="${caster_xyz}" 
+					rpy="${caster_rpy}"/>
+			<mass value="${caster_mass}"/>
+			<xacro:box_inertia 
+				m="${caster_mass}" 
+				l="0.04" 
+				w="0.04" 
+				h="0.04"/>
+		</inertial>
+
+	</link>
+
+	<link name="caster_wheel_link">
+
+		<collision>
+			<origin xyz="0 0 0" 
+					rpy="0 1.54 0"/>
+			<geometry>
+				<mesh filename="package://diff_drive_description/meshes/caster_wheel.stl" scale="0.02 0.02 0.02"/>
+	  		</geometry>
+		</collision>
+
+		<visual> 
+			<origin xyz="0 0.268 0.02" 
+					rpy="0 1.54 0"/>
+			<geometry>
+				<mesh filename="package://diff_drive_description/meshes/caster_wheel.stl" scale="0.025 0.025 0.025"/>
+			</geometry>
+			<material name="White" />
+		</visual>
+
+		<inertial>
+			<origin xyz="0 0 0" 
+					rpy="0 0 0"/>
+			<mass value="0.02"/>
+			<xacro:box_inertia 
+				m="0.02" 
+				l="0.04" 
+				w="0.04" 
+				h="0.04"/>
+		</inertial>
+
+	</link>
+
+    <joint name="base_joint" type="fixed">
+		<parent link="base_footprint"/>
+		<child link="base_link"/>
+	</joint>
+
+    <joint name="${wheel_l_ln}_joint" type="continuous">
+		<parent link="base_link"/>
+		<child link="${wheel_l_ln}_link"/>
+	</joint>
+
+    <joint name="${wheel_r_ln}_joint" type="continuous">
+		<parent link="base_link"/>
+		<child link="${wheel_r_ln}_link"/>
+	</joint>
+
+    <joint name="${caster_ln}_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="${caster_ln}_link"/>
+	</joint>
+
+	<joint name="caster_wheel_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="caster_wheel_link"/>
+	</joint>
+
+</xacro:macro>
+</robot>
