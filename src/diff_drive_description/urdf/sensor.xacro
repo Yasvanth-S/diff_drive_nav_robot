@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+    <material name="Gold">
+        <color rgba="1.0 0.8 0.0 1.0"/>
+    </material>
+
+    <xacro:macro name="cylinder_inertia" params="m r h">
+    
+        <inertia  
+            		ixx = "${m*(3*(r*r+h*h))/12}" 
+                    ixy = "0" 
+                    ixz = "0"
+                    iyy = "${m*(3*(r*r+h*h))/12}" 
+                    iyz = "0"
+                    izz = "${(m*r*r)/2}"
+        />
+    </xacro:macro>
+    
+    <xacro:macro name="box_inertia" params="m l w h">
+    
+        <inertia  
+            		ixx = "${m*(w*w+h*h)/12}" 
+                    ixy = "0" 
+                    ixz = "0"
+                    iyy = "${m*(l*l+h*h)/12}" 
+                    iyz = "0"
+                    izz = "${m*(l*l+w*w)/12}"
+        />
+    </xacro:macro>
+    <xacro:macro
+    name="sensor"
+    params="lidar_ln lidar_xyz lidar_rpy lidar_mass camera_ln camera_xyz camera_rpy camera_mass imu_ln imu_xyz imu_rpy imu_mass" >
+
+	<link name="camera_frame"></link>
+    <link name='${camera_ln}_link'>
+
+		<collision> 
+			<geometry> 
+				<mesh filename="package://diff_drive_description/meshes/Intel_RealSense_Depth_Camera_D435.stl" scale="1 1 1"/>
+			</geometry> 
+		</collision>
+
+		<visual> 
+			<geometry>  
+				<mesh filename="package://diff_drive_description/meshes/Intel_RealSense_Depth_Camera_D435.stl" scale="1 1 1"/>
+			</geometry> 
+			<material name="White"/>
+		</visual>
+
+		<inertial> 
+			<mass value="${camera_mass}"/> 
+			<xacro:box_inertia 
+				m="${camera_mass}" 
+				l="0.4" 
+				w="0.4" 
+				h="0.2"/>
+		</inertial>
+	</link>
+
+    <link name='${lidar_ln}_link'>
+
+		<collision> 
+			<geometry> 
+				<mesh filename="package://diff_drive_description/meshes/lidar.STL" scale="1 1 1"/>
+			</geometry> 
+		</collision>
+
+		<visual>  
+			<geometry>  
+				<mesh filename="package://diff_drive_description/meshes/lidar.STL" scale="1 1 1"/>
+			</geometry> 
+			<material name="Black"/>
+		</visual>
+
+		<inertial> 
+			<mass value="${lidar_mass}"/> 
+			<xacro:box_inertia 
+				m="${lidar_mass}" 
+				l="0.4" 
+				w="0.4" 
+				h="0.2"/>
+		</inertial>
+	</link>
+
+    <link name='${imu_ln}_link'>
+
+		<collision> 
+			<geometry> 
+				<mesh filename="package://diff_drive_description/meshes/imu.stl" scale="1 1 1"/>
+			</geometry> 
+		</collision>
+
+		<visual> 
+			<geometry>  
+				<mesh filename="package://diff_drive_description/meshes/imu.stl" scale="1 1 1"/>
+			</geometry> 
+			<material name="Black"/>
+		</visual>
+
+		<inertial> 
+			<mass value="${imu_mass}"/> 
+			<xacro:box_inertia 
+				m="${imu_mass}" 
+				l="0.4" 
+				w="0.4" 
+				h="0.2"/>
+		</inertial>
+	</link>
+
+    <joint name="${camera_ln}_joint" type="fixed">
+		<parent link="base_frame"/>
+		<child link="${camera_ln}_link"/>
+		<origin xyz="${camera_xyz}" rpy="${camera_rpy}"/>
+	</joint>
+
+    <joint name="${lidar_ln}_joint" type="fixed">
+		<parent link="base_frame"/>
+		<child link="${lidar_ln}_link"/>
+		<origin xyz="${lidar_xyz}" rpy="${lidar_rpy}"/>
+	</joint>
+
+    <joint name="${imu_ln}_joint" type="fixed">
+		<parent link="base_frame"/>
+		<child link="${imu_ln}_link"/>
+		<origin xyz="${imu_xyz}" rpy="${imu_rpy}"/>
+	</joint>
+
+	<joint name="camera_frame_joint" type="fixed">
+		<origin xyz="0.0 0 0" rpy="-1.54 0.0 -1.54"/>
+		<parent link="camera_link"/>
+		<child link="camera_frame"/>
+	</joint>
+
+    </xacro:macro>
+</robot>

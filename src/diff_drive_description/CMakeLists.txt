@@ -8,16 +8,7 @@ project(diff_drive_description)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  gazebo_msgs
-  gazebo_plugins
-  gazebo_ros
-  gazebo_ros_control
-  geometry_msgs
-  roscpp
-  rospy
-  sensor_msgs
-  tf
-  tf2
+  urdf
 )
 
 ## System dependencies are found with CMake's conventions

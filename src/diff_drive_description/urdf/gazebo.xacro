@@ -8,27 +8,31 @@
 
     <gazebo>
         <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-      
+          
+          <alwaysOn>true</alwaysOn>
+
           <!-- Plugin update rate in Hz -->
           <updateRate>20</updateRate>
       
           <!-- Name of left joint, defaults to `left_joint` -->
-          <leftJoint>{wheel_l_ln}_joint</leftJoint>
+          <leftJoint>${wheel_l_ln}_joint</leftJoint>
       
           <!-- Name of right joint, defaults to `right_joint` -->
-          <rightJoint>{wheel_r_ln}_joint</rightJoint>
+          <rightJoint>${wheel_r_ln}_joint</rightJoint>
       
           <!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
-          <wheelSeparation>0.5380</wheelSeparation>
+          <wheelSeparation>0.29</wheelSeparation>
       
           <!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
-          <wheelDiameter>0.8</wheelDiameter>
+          <wheelDiameter>0.08</wheelDiameter>
       
           <!-- Wheel acceleration, in rad/s^2, defaults to 0.0 rad/s^2 -->
-          <wheelAcceleration>1.0</wheelAcceleration>
+          <wheelAcceleration>0</wheelAcceleration>
       
-          <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm -->
-          <wheelTorque>20</wheelTorque>
+          <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm-->
+          <wheelTorque>5</wheelTorque>
+
+          <torque>5</torque>
       
           <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
           <commandTopic>cmd_vel</commandTopic>
@@ -43,73 +47,73 @@
           <robotBaseFrame>base_footprint</robotBaseFrame>
       
           <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
-          <odometrySource>1</odometrySource>
+          <odometrySource>world</odometrySource>
       
           <!-- Set to true to publish transforms for the wheel links, defaults to false -->
           <publishWheelTF>false</publishWheelTF>
       
           <!-- Set to true to publish transforms for the odometry, defaults to true -->
-          <publishOdom>true</publishOdom>
+          <!-- <publishOdom>true</publishOdom> -->
       
           <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
-          <publishWheelJointState>true</publishWheelJointState>
+          <publishWheelJointState>false</publishWheelJointState>
       
           <!-- Set to true to swap right and left wheels, defaults to true -->
           <legacyMode>false</legacyMode>
 
           <!-- Set to true to publish transforms, defaults to true -->
-          <publishTf>true</publishTf>
+          <publishOdomTF>true</publishOdomTF>
+          
+          <publishTf>1</publishTf>
+          
+          <rosDebugLevel>na</rosDebugLevel>
+
         </plugin>
     </gazebo>
 
 
-    <gazebo reference="${camera_ln_n}">
-        <sensor name="${camera_ln_n}_camera" type="depth">
+    <gazebo reference="${camera_ln_n}_link">
+        <sensor name="${camera_ln_n}" type="depth">
           <update_rate>20</update_rate>
           <camera>
-            <horizontal_fov>1.047198</horizontal_fov>
+            <horizontal_fov>1.1</horizontal_fov>
             <image>
-              <width>640</width>
-              <height>480</height>
+              <width>720</width>
+              <height>640</height>
               <format>R8G8B8</format>
             </image>
             <clip>
-              <near>0.05</near>
-              <far>3</far>
+              <near>0.1</near>
+              <far>8.0</far>
             </clip>
           </camera>
           <plugin name="${camera_ln_n}_controller" filename="libgazebo_ros_openni_kinect.so">
-            <baseline>0.2</baseline>
+            <baseline>0.1</baseline>
             <alwaysOn>true</alwaysOn>
-            <updateRate>1.0</updateRate>
-            <cameraName>${camera_name}_ir</cameraName>
+            <updateRate>20</updateRate>
+            <cameraName>${camera_name}</cameraName>
             <imageTopicName>/${camera_name}/color/image_raw</imageTopicName>
             <cameraInfoTopicName>/${camera_name}/color/camera_info</cameraInfoTopicName>
             <depthImageTopicName>/${camera_name}/depth/image_raw</depthImageTopicName>
             <depthImageInfoTopicName>/${camera_name}/depth/camera_info</depthImageInfoTopicName>
             <pointCloudTopicName>/${camera_name}/depth/points</pointCloudTopicName>
-            <frameName>${camera_ln_n}_link</frameName>
-            <pointCloudCutoff>0.5</pointCloudCutoff>
-            <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
-            <distortionK1>0.00000001</distortionK1>
-            <distortionK2>0.00000001</distortionK2>
-            <distortionK3>0.00000001</distortionK3>
-            <distortionT1>0.00000001</distortionT1>
-            <distortionT2>0.00000001</distortionT2>
-            <CxPrime>0</CxPrime>
-            <Cx>0</Cx>
-            <Cy>0</Cy>
-            <focalLength>0</focalLength>
-            <hackBaseline>0</hackBaseline>
+            <frameName>${camera_ln_n}_frame</frameName>
+            <pointCloudCutoff>0.1</pointCloudCutoff>
+            <pointCloudCutoffMax>8.0</pointCloudCutoffMax>
+            <distortion_k1>0.0</distortion_k1>
+            <distortion_k2>0.0</distortion_k2>
+            <distortion_k3>0.0</distortion_k3>
+            <distortion_t1>0.0</distortion_t1>
+            <distortion_t2>0.0</distortion_t2>
           </plugin>
         </sensor>
     </gazebo>
 
-    <gazebo reference="${imu_ln_n}">
+    <gazebo reference="${imu_ln_n}_link">
         <gravity>true</gravity>
-        <sensor name="imu_sensor" type="imu">
+        <sensor name="${imu_ln_n}_link" type="imu">
           <always_on>true</always_on>
-          <update_rate>100</update_rate>
+          <update_rate>20</update_rate>
           <visualize>true</visualize>
           <topic>__default_topic__</topic>
           <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
@@ -124,6 +128,63 @@
           </plugin>
           <pose>0 0 0 0 0 0</pose>
         </sensor>
+    </gazebo>
+
+    <gazebo reference="${lidar_ln}_link">
+       <sensor type="ray" name="head_rplidar_sensor">
+         <pose>0 0 0 0 0 0</pose>
+         <visualize>false</visualize>
+         <update_rate>100</update_rate>
+         <ray>
+           <scan>
+             <horizontal>
+               <samples>1920</samples>
+               <resolution>1</resolution>
+               <min_angle>-3.14159265</min_angle>
+               <max_angle>3.14159265</max_angle>
+             </horizontal>
+           </scan>
+           <range>
+             <min>0.2</min>
+             <max>12.0</max>
+             <resolution>1.0</resolution>
+           </range>
+           <noise>
+             <type>gaussian</type>
+             <mean>0.0</mean>
+             <stddev>0.01</stddev> 
+           </noise>
+         </ray>
+         <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_laser.so">
+           <topicName>/scan</topicName>
+           <robotNamespace>/laser_scan/scan</robotNamespace>
+           <frameName>rplidar_link</frameName>
+         </plugin>
+       </sensor>
+     </gazebo>
+
+    <gazebo reference="base_frame">
+      <material>Gazebo/Gold</material>
+    </gazebo>
+  
+    <gazebo reference="${wheel_r_ln}_link">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <gazebo reference="${wheel_l_ln}_link">
+      <material>Gazebo/Red</material>
+    </gazebo>
+  
+    <gazebo reference="${imu_ln_n}_link">
+      <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="${camera_ln_n}_link">
+      <material>Gazebo/White</material>
+    </gazebo>
+    
+    <gazebo reference="${lidar_ln}_link">
+      <material>Gazebo/Black</material>
     </gazebo>
 
     </xacro:macro>
