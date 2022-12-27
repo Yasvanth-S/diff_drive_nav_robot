@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="efk_local" clear_params="true">
+        <rosparam command="load" file="$(find diff_drive_localisation)/params/ekf.yaml"/>
+    </node>
+
+</launch>

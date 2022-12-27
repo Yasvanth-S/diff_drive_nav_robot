@@ -62,7 +62,7 @@
           <legacyMode>false</legacyMode>
 
           <!-- Set to true to publish transforms, defaults to true -->
-          <publishOdomTF>true</publishOdomTF>
+          <publishOdomTF>false</publishOdomTF>
           
           <publishTf>1</publishTf>
           
@@ -79,7 +79,7 @@
             <horizontal_fov>1.1</horizontal_fov>
             <image>
               <width>720</width>
-              <height>640</height>
+              <height>680</height>
               <format>R8G8B8</format>
             </image>
             <clip>

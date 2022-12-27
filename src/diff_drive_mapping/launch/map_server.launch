@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <node pkg="map_server" type="map_server" name="map_server" args= "$(find diff_drive_mapping)/maps/map.yaml"/>    
+
+</launch>

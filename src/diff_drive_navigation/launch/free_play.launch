@@ -1,6 +1,12 @@
 <launch>
 
-    <include file="$(find diff_drive_gazebo)/launch/gazebo_house.launch"/>	
+    <include file="$(find diff_drive_gazebo)/launch/gazebo_house.launch"/>
+    <!-- 
+        for mapping using hector_slam
+        <include file="$(find diff_drive_mapping)/launch/hector_mapping.launch"/> 
+    -->
+    <include file="$(find diff_drive_mapping)/launch/map_server.launch"/>
+    <include file="$(find diff_drive_localisation)/launch/gmcl.launch"/>	
     <param name="robot_description" command="$(find xacro)/xacro '$(find diff_drive_description)/urdf/diff_drive.xacro'" />
         <arg name="x" default="0.0" />
         <arg name="y" default="0.0" />
@@ -9,6 +15,6 @@
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -model diff_drive -param robot_description"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-    <node name="static_map_odom" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 map odom 100" />
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find diff_drive_navigation)/config/depth_camera.rviz"/>
+
 </launch>
