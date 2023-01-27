@@ -1,0 +1,9 @@
+GlobalPlanner:
+  allow_unknown: false
+  visualize_potential: true
+  use_dijkstra: true
+  use_quadratic: true
+  use_grid_path: false
+  old_navfn_behavior: false
+  default_tolerance: 0.5
+  

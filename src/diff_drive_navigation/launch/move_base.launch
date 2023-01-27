@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen">
+        <param name="base_global_planner" value="navfn/NavfnROS"/>
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
+        <rosparam command="load" file="$(find diff_drive_navigation)/config/local_costmap.yaml"/>
+        <rosparam command="load" file="$(find diff_drive_navigation)/config/global_costmap.yaml"/>
+        <rosparam command="load" file="$(find diff_drive_navigation)/config/move_base.yaml"/>
+        <rosparam command="load" file="$(find diff_drive_navigation)/config/global_planner.yaml"/>
+        <rosparam command="load" file="$(find diff_drive_navigation)/config/teb_local_planner.yaml"/>
+        <rosparam command="load" file="$(find diff_drive_navigation)/config/navfn_global_planner.yaml"/>
+    </node>
+    
+</launch>

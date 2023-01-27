@@ -1,0 +1,4 @@
+NavfnROS:
+  visualize_potential: false
+  allow_unknown: false
+  

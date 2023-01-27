@@ -1,0 +1,6 @@
+<library path="lib/libdiff_drive_move_base_plugin">
+
+    <class name="diff_drive_move_base_plugin/DiffDriveClientPlugin" type="diff_drive_move_base_plugin::DiffDriveClientPlugin" base_class_type="nav_core::BaseGlobalPlanner">
+    </class>
+
+</library>

@@ -6,7 +6,8 @@
         <include file="$(find diff_drive_mapping)/launch/hector_mapping.launch"/> 
     -->
     <include file="$(find diff_drive_mapping)/launch/map_server.launch"/>
-    <include file="$(find diff_drive_localisation)/launch/gmcl.launch"/>	
+    <include file="$(find diff_drive_localisation)/launch/gmcl.launch"/>
+    <include file="$(find diff_drive_navigation)/launch/move_base.launch"/>	
     <param name="robot_description" command="$(find xacro)/xacro '$(find diff_drive_description)/urdf/diff_drive.xacro'" />
         <arg name="x" default="0.0" />
         <arg name="y" default="0.0" />

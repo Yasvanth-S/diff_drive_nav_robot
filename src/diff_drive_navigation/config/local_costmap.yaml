@@ -1,0 +1,36 @@
+local_costmap:
+  global_frame: odom
+  robot_base_frame: base_footprint
+  footprint: [[0.2,0.2], [0.2,-0.2], [-0.2,-0.2], [-0.2,0.2]]
+  footprint_padding: 0.0
+  update_frequency: 2.0
+  publish_frequency: 2.0
+  rolling_window: true
+  width: 2.0
+  height: 2.0
+  resolution: 0.01
+  transform_tolerance: 2.0
+  static_map: false
+
+  plugins:
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+    - {name: static_map, type: "costmap_2d::StaticLayer"}
+    - {name: lidar, type: "costmap_2d::ObstacleLayer"}
+  inflation_layer:
+    cost_scaling_factor: 10
+    inflation_radius: 0.2
+  
+  static_map:
+    map_topic: "map"
+  
+  sensor:
+    observation_sources: laser
+    laser:
+      topic: "/scan"
+      sensor_frame: "rplidar_link"
+      data_type: "LaserScan"
+      obstacle_range: 0.3
+      raytrace_range: 0.3
+      marking: true
+      clearing: true
+      inf_is_valid: true
